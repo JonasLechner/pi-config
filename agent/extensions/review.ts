@@ -1850,8 +1850,12 @@ export default function reviewExtension(pi: ExtensionAPI) {
 				let useFreshSession = messageCount === 0;
 
 				if (messageCount > 0) {
-					// Existing session - ask user which mode they want
-					const choice = await ctx.ui.select("Start review in:", ["Empty branch", "Current session"]);
+					// Existing session - ask user which mode they want.
+					// Uncommitted reviews usually need current conversational context, so offer that first.
+					const choices = target.type === "uncommitted"
+						? ["Current session", "New branch"]
+						: ["New branch", "Current session"];
+					const choice = await ctx.ui.select("Start review in:", choices);
 
 					if (choice === undefined) {
 						if (fromSelector) {
@@ -1862,7 +1866,7 @@ export default function reviewExtension(pi: ExtensionAPI) {
 						return;
 					}
 
-					useFreshSession = choice === "Empty branch";
+					useFreshSession = choice === "New branch";
 				}
 
 				await executeReview(ctx, target, useFreshSession, { extraInstruction });
