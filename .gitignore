@@ -1,0 +1,16 @@
+# Secrets and local auth/session state
+agent/.env
+agent/auth.json
+agent/settings.json
+
+# Dependencies and generated binaries
+agent/node_modules/
+agent/bin/
+
+# Logs/cache/temp
+*.log
+.DS_Store
+Thumbs.db
+
+# Pi local session transcripts
+agent/sessions/
